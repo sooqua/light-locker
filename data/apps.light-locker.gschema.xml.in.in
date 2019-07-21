@@ -37,5 +37,19 @@
       </description>
     </key>
 
+    <key name="before-lock" type="s">
+      <default>""</default>
+      <summary>Script to run before locking the screen</summary>
+      <description>Script to run before locking the screen.
+      </description>
+    </key>
+
+    <key name="after-lock" type="s">
+      <default>""</default>
+      <summary>Script to run after unlocking the screen</summary>
+      <description>Script to run after unlocking the screen.
+      </description>
+    </key>
+
   </schema>
 </schemalist>

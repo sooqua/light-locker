@@ -84,6 +84,8 @@ light_locker_SOURCES =	\
 	gs-grab.h		\
 	gs-content.c		\
 	gs-content.h		\
+	shell.c		\
+	shell.h		\
 	$(BUILT_SOURCES)	\
 	$(NULL)
 

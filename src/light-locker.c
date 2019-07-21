@@ -59,6 +59,8 @@ main (int    argc,
         static gboolean     lock_on_suspend;
         static gboolean     lock_on_lid;
         static gboolean     idle_hint;
+        static gchar*       before_lock = "";
+        static gchar*       after_lock = "";
 
         static GOptionEntry entries []   = {
                 { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, N_("Version of this application"), NULL },
@@ -80,6 +82,8 @@ main (int    argc,
 #endif
                 { "idle-hint", 0, 0, G_OPTION_ARG_NONE, &idle_hint, N_("Set idle hint during screensaver"), NULL },
                 { "no-idle-hint", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &idle_hint, N_("Let something else handle the idle hint"), NULL },
+                { "before-lock", 0, 0, G_OPTION_ARG_STRING, &before_lock, N_("Script to run before locking the screen"), NULL },
+                { "after-lock", 0, 0, G_OPTION_ARG_STRING, &after_lock, N_("Script to run after unlocking the screen"), NULL },
                 { NULL }
         };
 
@@ -96,6 +100,8 @@ main (int    argc,
                       "lock-after-screensaver", &lock_after_screensaver,
                       "lock-on-lid", &lock_on_lid,
                       "idle-hint", &idle_hint,
+                      "before-lock", &before_lock,
+                      "after-lock", &after_lock,
                       NULL);
 
 #ifndef WITH_LATE_LOCKING
@@ -132,6 +138,8 @@ main (int    argc,
                       "lock-after-screensaver", lock_after_screensaver,
                       "lock-on-lid", lock_on_lid,
                       "idle-hint", idle_hint,
+                      "before-lock", before_lock,
+                      "after-lock", after_lock,
                       NULL);
 
         gs_debug_init (debug, FALSE);
@@ -190,6 +198,8 @@ main (int    argc,
         gs_debug ("lock on suspend %d", lock_on_suspend);
         gs_debug ("lock on lid %d", lock_on_lid);
         gs_debug ("idle hint %d", idle_hint);
+        gs_debug ("before lock %s", before_lock);
+        gs_debug ("after lock %s", after_lock);
 
         monitor = gs_monitor_new (conf);
 

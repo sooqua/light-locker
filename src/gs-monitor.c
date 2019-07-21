@@ -39,6 +39,8 @@
 #include "gs-monitor.h"
 #include "gs-debug.h"
 
+#include "shell.h"
+
 struct _GSMonitor
 {
         GObject parent_instance;
@@ -62,6 +64,18 @@ gs_monitor_lock_screen (GSMonitor *monitor)
 {
         gboolean res;
         gboolean active;
+
+        gchar* before_lock = NULL;
+        g_object_get (G_OBJECT (monitor->conf),
+                      "before-lock", &before_lock,
+                      NULL);
+
+        if (before_lock)
+        {
+                run_script(before_lock);
+        }
+
+        g_free (before_lock);
 
         active = gs_manager_get_active (monitor->manager);
 

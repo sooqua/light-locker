@@ -18,6 +18,8 @@ enum
     PROP_LOCK_AFTER_SCREENSAVER,
     PROP_LOCK_ON_LID,
     PROP_IDLE_HINT,
+    PROP_BEFORE_LOCK,
+    PROP_AFTER_LOCK,
     N_PROPERTIES
 };
 
@@ -40,6 +42,8 @@ struct _LLConfig
     gboolean   lock_on_suspend : 1;
     gboolean   lock_on_lid : 1;
     gboolean   idle_hint : 1;
+    gchar*     before_lock;
+    gchar*     after_lock;
 };
 
 G_DEFINE_TYPE (LLConfig, ll_config, G_TYPE_OBJECT)
@@ -84,6 +88,14 @@ static void ll_config_set_property (GObject      *object,
             conf->idle_hint = g_value_get_boolean(value);
             break;
 
+        case PROP_BEFORE_LOCK:
+            conf->before_lock = g_value_dup_string(value);
+            break;
+
+        case PROP_AFTER_LOCK:
+            conf->after_lock = g_value_dup_string(value);
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
             break;
@@ -126,6 +138,14 @@ static void ll_config_get_property (GObject    *object,
 
         case PROP_IDLE_HINT:
             g_value_set_boolean(value, conf->idle_hint);
+            break;
+
+        case PROP_BEFORE_LOCK:
+            g_value_set_string(value, conf->before_lock);
+            break;
+
+        case PROP_AFTER_LOCK:
+            g_value_set_string(value, conf->after_lock);
             break;
 
         default:
@@ -208,6 +228,29 @@ ll_config_class_init (LLConfigClass *klass)
                                   FALSE,
                                   G_PARAM_READWRITE);
 
+    /**
+     * LLConfig:before-lock:
+     *
+     * Script to run before locking the screen
+     **/
+    obj_properties[PROP_BEFORE_LOCK] =
+            g_param_spec_string ("before-lock",
+                                  "Before lock",
+                                  "Script to run before locking the screen",
+                                  NULL,
+                                  G_PARAM_READWRITE);
+    /**
+     * LLConfig:after-lock:
+     *
+     * Script to run after unlocking the screen
+     **/
+    obj_properties[PROP_AFTER_LOCK] =
+            g_param_spec_string ("after-lock",
+                                  "After lock",
+                                  "Script to run after unlocking the screen",
+                                  NULL,
+                                  G_PARAM_READWRITE);
+
     g_object_class_install_properties (object_class,
                                        N_PROPERTIES,
                                        obj_properties);
@@ -240,6 +283,8 @@ ll_config_init (LLConfig *conf)
     conf->lock_on_lid = WITH_LOCK_ON_LID;
 #endif
     conf->idle_hint = FALSE;
+    conf->before_lock = NULL;
+    conf->after_lock = NULL;
 
 #ifdef WITH_SETTINGS_BACKEND
 #define GSETTINGS 1
