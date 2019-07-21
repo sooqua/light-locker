@@ -221,6 +221,24 @@ conf_idle_hint_cb (LLConfig    *conf,
 }
 
 static void
+listener_unlocked_cb (GSListener *listener,
+                      GSMonitor  *monitor)
+{
+        gchar* after_lock = NULL;
+        g_object_get (G_OBJECT (monitor->conf),
+                      "after-lock", &after_lock,
+                      NULL);
+
+        if (after_lock)
+        {
+                run_script(after_lock);
+        }
+
+        g_free (after_lock);
+
+}
+
+static void
 listener_locked_cb (GSListener *listener,
                     GSMonitor  *monitor)
 {
@@ -447,6 +465,8 @@ gs_monitor_init (GSMonitor *monitor)
          */
         g_signal_connect (monitor->listener, "locked",
                           G_CALLBACK (listener_locked_cb), monitor);
+        g_signal_connect (monitor->listener, "unlocked",
+                          G_CALLBACK (listener_unlocked_cb), monitor);
         g_signal_connect (monitor->listener, "lock",
                           G_CALLBACK (listener_lock_cb), monitor);
         g_signal_connect (monitor->listener, "session-switched",
@@ -500,6 +520,7 @@ gs_monitor_dispose (GObject *object)
          * Listener signals
          */
         g_signal_handlers_disconnect_by_func (monitor->listener, listener_locked_cb, monitor);
+        g_signal_handlers_disconnect_by_func (monitor->listener, listener_unlocked_cb, monitor);
         g_signal_handlers_disconnect_by_func (monitor->listener, listener_lock_cb, monitor);
         g_signal_handlers_disconnect_by_func (monitor->listener, listener_session_switched_cb, monitor);
         g_signal_handlers_disconnect_by_func (monitor->listener, listener_active_changed_cb, monitor);

@@ -91,6 +91,7 @@ struct GSListenerPrivate
 enum {
         LOCK,
         LOCKED,
+        UNLOCKED,
         SESSION_SWITCHED,
         ACTIVE_CHANGED,
         SUSPEND,
@@ -1314,6 +1315,7 @@ listener_dbus_handle_system_message (DBusConnection *connection,
                 if (dbus_message_is_signal (message, SYSTEMD_LOGIND_SESSION_INTERFACE, "Unlock")) {
                         if (_listener_message_path_is_our_session (listener, message)) {
                                 gs_debug ("systemd requested session unlock");
+                                g_signal_emit (listener, signals [UNLOCKED], 0);
                                 gs_listener_set_active (listener, FALSE);
                         }
 
@@ -1621,6 +1623,16 @@ gs_listener_class_init (GSListenerClass *klass)
                               G_TYPE_FROM_CLASS (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GSListenerClass, locked),
+                              NULL,
+                              NULL,
+                              g_cclosure_marshal_VOID__VOID,
+                              G_TYPE_NONE,
+                              0);
+        signals [UNLOCKED] =
+                g_signal_new ("unlocked",
+                              G_TYPE_FROM_CLASS (object_class),
+                              G_SIGNAL_RUN_LAST,
+                              G_STRUCT_OFFSET (GSListenerClass, unlocked),
                               NULL,
                               NULL,
                               g_cclosure_marshal_VOID__VOID,

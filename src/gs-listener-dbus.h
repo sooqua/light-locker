@@ -46,6 +46,7 @@ typedef struct
 
         void            (* lock)                     (GSListener *listener);
         void            (* locked)                   (GSListener *listener);
+        void            (* unlocked)                 (GSListener *listener);
         void            (* session_switched)         (GSListener *listener,
                                                       gboolean    active);
         gboolean        (* active_changed)           (GSListener *listener,
