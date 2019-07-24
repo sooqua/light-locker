@@ -1,10 +1,11 @@
 #include "shell.h"
 #include <stdio.h>
 
-int run_script(gchar* path)
+gint
+run_script (gchar* path)
 {
     gchar line[512];
-    int linenr;
+    gint  linenr;
     FILE *pipe;
 
     pipe = popen(path, "r");
