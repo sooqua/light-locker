@@ -89,10 +89,12 @@ static void ll_config_set_property (GObject      *object,
             break;
 
         case PROP_BEFORE_LOCK:
+            g_free(conf->before_lock);
             conf->before_lock = g_value_dup_string(value);
             break;
 
         case PROP_AFTER_LOCK:
+            g_free(conf->after_lock);
             conf->after_lock = g_value_dup_string(value);
             break;
 
