@@ -744,14 +744,14 @@ gs_window_class_init (GSWindowClass *klass)
                                       NULL,
                                       NULL,
                                       FALSE,
-                                      G_PARAM_READABLE);
+                                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
         obj_properties[PROP_MONITOR] =
                 g_param_spec_int ("monitor",
                                   "Xinerama monitor",
                                   "The monitor (in terms of Xinerama) which the window is on",
                                   0, G_MAXINT, 0,
-                                  G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                                  G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
         g_object_class_install_properties (object_class,
                                            N_PROPERTIES,
