@@ -50,7 +50,7 @@ enum {
 
 struct _GSWindow
 {
-        GObject parent_instance;
+        GtkWindow parent_instance;
         int     monitor;
 
         GdkRectangle geometry;

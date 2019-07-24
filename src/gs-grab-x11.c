@@ -43,6 +43,7 @@ static void     gs_grab_finalize   (GObject        *object);
 
 struct _GSGrab
 {
+        GObject parent_instance;
         GDBusConnection *session_bus;
 
         gboolean   mouse_hide_cursor;

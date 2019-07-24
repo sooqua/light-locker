@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 #define GS_TYPE_WINDOW gs_window_get_type ()
-G_DECLARE_FINAL_TYPE (GSWindow, gs_window, GS, WINDOW, GObject)
+G_DECLARE_FINAL_TYPE (GSWindow, gs_window, GS, WINDOW, GtkWindow)
 
 gboolean    gs_window_is_obscured        (GSWindow  *window);
 
